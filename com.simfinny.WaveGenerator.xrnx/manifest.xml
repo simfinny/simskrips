@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RenoiseScriptingTool doc_version="0">
+  <Name>WaveGenerator</Name>
+  <Id>com.simfinny.WaveGenerator</Id>
+  <Version>0.1</Version>
+  <ApiVersion>5</ApiVersion>
+  <Author>simfinny</Author>
+  <AutoUpgraded>false</AutoUpgraded>
+  <Category>Other</Category>
+  <Description>use it to generate classic waveforms in the sample editor</Description>
+  <Homepage/>
+  <Platform/>
+  <Icon/>
+</RenoiseScriptingTool>
