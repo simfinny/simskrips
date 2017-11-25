@@ -1,3 +1,11 @@
+--[[
+todo:
++ move wave selection from buttons to popup
++ consolidate sq / pulse options and add pulse width control (0.1-99.99)
++ different colors of noise
+--]]
+
+
 -- parameters
 -------------------------------------------------------------------
 sine = "Sine"
@@ -5,14 +13,10 @@ triangle = "Triangle"
 square = "Square"
 pulse = "Pulse"
 saw = "Saw"
+ramp = "Ramp"
 random = "Random"
 
-wave_types = {sine, triangle, square, pulse, saw, random}
-
-for i = 1, #wave_types, 1 do
-  print(wave_types[i])
-end
-
+wave_types = {sine, triangle, square, pulse, saw, ramp, random}
 selected_wave = 1
 num_samples = 168
 
@@ -28,10 +32,7 @@ require "generator"
 require "ui"
 -------------------------------------------------------------------
 
-show_modal()
-
---[[
 renoise.tool():add_menu_entry {
   name = "Sample Editor:Generate Wave...",
   invoke = function() show_modal() end 
-}--]]
+}

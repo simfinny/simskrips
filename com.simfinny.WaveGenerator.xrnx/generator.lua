@@ -21,10 +21,14 @@ end
 local function generate_triangle(buf)
 
   local value_func = function(i)
-    if (i % 2 == 0) then
-      return -1
+    local increment = 2 / num_samples
+    local halfway = num_samples / 2
+    if (i <= halfway / 2) then
+      return 2*increment*(i - 1)
+    elseif (i > halfway / 2 and i <= 3 * halfway / 2) then
+      return -2*increment*(i - 1) + 2
     else
-      return 1
+      return 2*increment*(i - 1) - 4
     end
   end
   
@@ -37,9 +41,9 @@ local function generate_square(buf)
   local value_func = function(i)
     local halfway = num_samples / 2
     if (i > halfway) then
-      return 1
-    else
       return -1
+    else
+      return 1
     end
   end
   
@@ -52,9 +56,9 @@ local function generate_pulse(buf)
   local value_func = function(i)
     local one_fourth = num_samples / 4
     if (i > one_fourth) then
-      return 1
-    else  
       return -1
+    else  
+      return 1
     end
   end
   
@@ -65,12 +69,23 @@ end
 local function generate_saw(buf)
 
   local value_func = function(i)
-    local increment = 2 * num_cycles / num_samples
-    return 0.5*increment*(i - 1) - 1;
+    local increment = 2 / num_samples
+    return increment*(i - 1) - 1;
   end
   
   generate_core(buf,value_func)
   
+end
+
+local function generate_ramp(buf)
+
+  local value_func = function(i)
+    local increment = 2 / num_samples
+    return -increment*(i-1)+1
+  end
+  
+  generate_core(buf, value_func)
+
 end
 
 local function generate_random(buf)
@@ -85,9 +100,17 @@ end
 
 function generate(wave)
 
+  if (wave == "Cancel") then
+    return
+  end
+
   local index = renoise.song().selected_instrument_index
   local instrument = renoise.song().instruments[index]
   local sample_index = renoise.song().selected_sample_index
+  if (sample_index == nil or sample_index == 0) then
+    instrument:insert_sample_at(1)
+    sample_index = 1
+  end
   local sample = instrument.samples[sample_index]
   local buf = sample.sample_buffer
   local sample_rate = sample_rates[selected_sample_rate]
@@ -99,19 +122,22 @@ function generate(wave)
   if (wave == sine) then
     generate_sine(buf)
     
-  elseif (wave_types[selected_wave] == triangle) then
+  elseif (wave == triangle) then
     generate_triangle(buf)
     
-  elseif (wave_types[selected_wave] == square) then
+  elseif (wave == square) then
     generate_square(buf)
     
-  elseif (wave_types[selected_wave] == pulse) then
+  elseif (wave == pulse) then
     generate_pulse(buf)
     
-  elseif (wave_types[selected_wave] == saw) then
+  elseif (wave == saw) then
     generate_saw(buf)
     
-  elseif (wave_types[selected_wave] == random) then
+  elseif (wave == ramp) then
+    generate_ramp(buf)
+    
+  elseif (wave == random) then
     generate_random(buf)
     
   end

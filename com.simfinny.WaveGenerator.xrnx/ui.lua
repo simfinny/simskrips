@@ -8,26 +8,16 @@ function show_modal()
     value = 168
   }
   
-  local num_cycles_valuebox = vb:valuebox {
-    min = 1,
-    max = 256,
-    value = 1
-  }
-  
   local column = vb:column {
     vb:text {
       text = "Number of Samples"
     },
     
-    num_samples_valuebox,
-    
-    vb:text {
-      text = "Number of Cycles"
-    }
+    num_samples_valuebox
   }
   
   local wave = renoise.app():show_custom_prompt("Generate Wave", column, wave_types)
-  
+  num_samples = num_samples_valuebox.value
   generate(wave)
   
 end
